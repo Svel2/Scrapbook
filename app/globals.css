@@ -1,26 +1,406 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Patrick+Hand&family=Caveat:wght@400;500;600;700&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary: #1a1f2e;
+  --bg-secondary: #232a3d;
+  --bg-card: #2a3347;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --accent-teal: #5DADE2;
+  --page-cream: #faf8f5;
+  --page-lines: #e8e4df;
+  --ink-color: #2c3e50;
+  --ink-light: #7f8c8d;
+  --cover-color: #8B6B4F;
+  --cover-dark: #5D4E37;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  min-height: 100vh;
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* Main Container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+/* Title Section */
+.journal-info {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.journal-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.journal-pages {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Book Container */
+.book-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Flipbook Styles */
+.flipbook {
+  width: 100% !important;
+  max-width: 700px;
+}
+
+/* Page Base */
+.page {
+  background: var(--page-cream);
+  overflow: hidden;
+}
+
+/* Cover Pages */
+.page.cover-page {
+  background: linear-gradient(135deg, var(--cover-color) 0%, var(--cover-dark) 100%);
+}
+
+.cover-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: white;
+}
+
+.cover-content.back {
+  background: linear-gradient(135deg, var(--cover-dark) 0%, var(--cover-color) 100%);
+}
+
+.cover-decoration {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.cover-decoration.bottom {
+  margin-bottom: 0;
+  margin-top: 1.5rem;
+}
+
+.cover-title {
+  font-family: 'Caveat', cursive;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.cover-subtitle {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Content Pages */
+.page.content-page {
+  background: var(--page-cream);
+}
+
+/* Page Content */
+.page-content {
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Patrick Hand', cursive;
+  position: relative;
+}
+
+.page-header {
+  font-size: 0.7rem;
+  color: var(--ink-light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.page-title {
+  font-size: 1.4rem;
+  color: var(--ink-color);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.page-text {
+  font-size: 1.1rem;
+  color: var(--ink-color);
+  line-height: 1.8;
+  flex: 1;
+}
+
+/* Lined Paper Effect */
+.lined-paper {
+  background:
+    linear-gradient(var(--page-cream), var(--page-cream)),
+    repeating-linear-gradient(transparent,
+      transparent 27px,
+      var(--page-lines) 27px,
+      var(--page-lines) 28px);
+  background-position: 0 24px;
+}
+
+/* Sticky Notes */
+.sticky-note {
+  position: absolute;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--ink-color);
+  transform: rotate(-2deg);
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.15);
+  font-family: 'Patrick Hand', cursive;
+  max-width: 100px;
+}
+
+.sticky-note.yellow {
+  background: #fff9c4;
+}
+
+.sticky-note.green {
+  background: #c8e6c9;
+}
+
+.sticky-note.blue {
+  background: #b3e5fc;
+}
+
+/* Page Decoration */
+.page-decoration {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 4px;
+}
+
+.page-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-teal);
+  opacity: 0.6;
+}
+
+/* Navigation Controls */
+.nav-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.nav-btn {
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.page-indicator {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .journal-info {
+    margin-bottom: 1rem;
+  }
+
+  .journal-title {
+    font-size: 1.5rem;
+  }
+
+  .book-container {
+    padding: 0.5rem 0.5rem;
+  }
+
+  .page-content {
+    padding: 1rem 0.75rem;
+  }
+
+  .cover-title {
+    font-size: 1.8rem;
+  }
+
+  .cover-subtitle {
+    font-size: 1rem;
+  }
+
+  .page-title {
+    font-size: 1.1rem;
+  }
+
+  .page-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .page-header {
+    font-size: 0.6rem;
+  }
+
+  .sticky-note {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.7rem;
+    max-width: 70px;
+  }
+
+  .nav-controls {
+    margin-top: 1rem;
+    gap: 0.75rem;
+  }
+
+  .nav-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .page-indicator {
+    font-size: 0.8rem;
+    min-width: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    padding: 0.75rem 0.25rem;
+  }
+
+  .journal-title {
+    font-size: 1.3rem;
+  }
+
+  .journal-pages {
+    font-size: 0.75rem;
+  }
+
+  .book-container {
+    padding: 0.25rem;
+  }
+
+  .page-content {
+    padding: 0.6rem 0.5rem;
+  }
+
+  .cover-title {
+    font-size: 1.4rem;
+  }
+
+  .cover-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .cover-decoration {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-title {
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .page-text {
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .page-header {
+    font-size: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .sticky-note {
+    padding: 0.3rem 0.4rem;
+    font-size: 0.6rem;
+    max-width: 55px;
+  }
+
+  .page-decoration {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    gap: 2px;
+  }
+
+  .page-dot {
+    width: 4px;
+    height: 4px;
+  }
+
+  .nav-controls {
+    margin-top: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .nav-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    gap: 0.25rem;
+  }
+
+  .page-indicator {
+    font-size: 0.75rem;
+    min-width: 40px;
+  }
 }
