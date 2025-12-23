@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState, useCallback, useEffect } from 'react'
 import HTMLFlipBook from 'react-pageflip'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import React from 'react'
@@ -18,70 +18,45 @@ const Page = React.forwardRef<HTMLDivElement, {
 })
 Page.displayName = 'Page'
 
-// Page content data
-const pagesContent = [
+// Page data - each page has an image
+// Replace these with your actual image paths
+const pagesData = [
     // Cover
     {
         type: 'cover',
-        title: 'My Scrapbook',
-        subtitle: '2024 Memories'
+        title: 'Scrapbook Birthday for My Best Friend',
+        subtitle: ''
     },
-    // Page 1
+    // Image pages - replace src with your PNG/image paths
     {
-        type: 'content',
-        header: 'SKETCH',
-        title: 'Your Visual Library',
-        content: 'A collection of moments, ideas, and memories gathered through time.',
-        notes: [
-            { color: 'yellow', text: 'Remember this!', style: { top: '50%', left: '10%' } },
-            { color: 'green', text: 'Ideas ✨', style: { top: '65%', right: '15%' } }
-        ]
+        type: 'image',
+        src: '/images/page1.gif', // Put your images in public/images/
+        alt: 'Page 1'
     },
-    // Page 2
     {
-        type: 'content',
-        header: 'PAGE 01',
-        title: 'Getting Started',
-        content: 'Every journey begins with a single page. This scrapbook holds your precious memories.',
-        notes: []
+        type: 'image',
+        src: '/images/page 3.gif',
+        alt: 'Page 2'
     },
-    // Page 3
     {
-        type: 'content',
-        header: 'MEMORIES',
-        title: 'Birthday Celebration',
-        content: 'Another year, another adventure. Celebrating life with those who matter most.',
-        notes: [
-            { color: 'blue', text: '🎂 Party!', style: { top: '55%', right: '10%' } }
-        ]
+        type: 'image',
+        src: '/images/page2.gif',
+        alt: 'Page 3'
     },
-    // Page 4
     {
-        type: 'content',
-        header: 'PAGE 02',
-        title: 'Special Moments',
-        content: 'The best things in life are the people we love, the places we\'ve been, and the memories we\'ve made.',
-        notes: []
+        type: 'image',
+        src: '/images/page1.gif',
+        alt: 'Page 4'
     },
-    // Page 5
     {
-        type: 'content',
-        header: 'NOTES',
-        title: 'Dreams & Goals',
-        content: 'Write down your dreams. They become goals. Goals become plans. Plans become reality.',
-        notes: [
-            { color: 'green', text: '2024 Goals', style: { top: '55%', left: '15%' } }
-        ]
+        type: 'image',
+        src: '/images/page2.gif',
+        alt: 'Page 5'
     },
-    // Page 6
     {
-        type: 'content',
-        header: 'PAGE 03',
-        title: 'Reflections',
-        content: 'Take time to reflect on how far you\'ve come. Every step matters.',
-        notes: [
-            { color: 'yellow', text: '★ ★ ★', style: { bottom: '20%', left: '20%' } }
-        ]
+        type: 'image',
+        src: '/images/page 3.gif',
+        alt: 'Page 6'
     },
     // Back Cover
     {
@@ -94,7 +69,28 @@ const pagesContent = [
 export default function Scrapbook() {
     const bookRef = useRef<any>(null)
     const [currentPage, setCurrentPage] = useState(0)
-    const totalPages = pagesContent.length
+    const [isMobile, setIsMobile] = useState(false)
+    const [isTablet, setIsTablet] = useState(false)
+    const totalPages = pagesData.length
+
+    // Detect screen size for responsive behavior
+    useEffect(() => {
+        const checkScreenSize = () => {
+            const width = window.innerWidth
+            // Single page mode ONLY for phone screens <= 768px
+            setIsMobile(width <= 768)
+            // Tablet size for screens between 768px and 1024px (uses double-page spread)
+            setIsTablet(width > 768 && width <= 1024)
+        }
+
+        // Check on mount
+        checkScreenSize()
+
+        // Add resize listener
+        window.addEventListener('resize', checkScreenSize)
+
+        return () => window.removeEventListener('resize', checkScreenSize)
+    }, [])
 
     const onFlip = useCallback((e: any) => {
         setCurrentPage(e.data)
@@ -115,26 +111,20 @@ export default function Scrapbook() {
     return (
         <div className="app-container">
             {/* Journal Info */}
-            <div className="journal-info">
-                <h1 className="journal-title">Scrapbook</h1>
-                <p className="journal-pages">
-                    <span>📖</span>
-                    {totalPages} Pages
-                </p>
-            </div>
+
 
             {/* Book Container */}
             <div className="book-container">
                 {/* @ts-ignore - react-pageflip types issue */}
                 <HTMLFlipBook
                     ref={bookRef}
-                    width={320}
-                    height={450}
+                    width={isTablet ? 300 : isMobile ? 280 : 365}
+                    height={isTablet ? 400 : isMobile ? 420 : 475}
                     size="stretch"
-                    minWidth={150}
-                    maxWidth={400}
-                    minHeight={200}
-                    maxHeight={550}
+                    minWidth={isTablet ? 250 : isMobile ? 250 : 150}
+                    maxWidth={isTablet ? 380 : isMobile ? 350 : 480}
+                    minHeight={isTablet ? 340 : isMobile ? 375 : 200}
+                    maxHeight={isTablet ? 500 : isMobile ? 550 : 620}
                     showCover={true}
                     mobileScrollSupport={true}
                     onFlip={onFlip}
@@ -143,7 +133,7 @@ export default function Scrapbook() {
                     startPage={0}
                     drawShadow={true}
                     flippingTime={600}
-                    usePortrait={false}
+                    usePortrait={isMobile}
                     startZIndex={0}
                     autoSize={true}
                     maxShadowOpacity={0.5}
@@ -153,17 +143,26 @@ export default function Scrapbook() {
                     clickEventForward={true}
                     useMouseEvents={true}
                 >
-                    {pagesContent.map((page, index) => (
-                        <Page key={index} className={page.type === 'cover' || page.type === 'back-cover' ? 'cover-page' : 'content-page'}>
+                    {pagesData.map((page, index) => (
+                        <Page
+                            key={index}
+                            className={
+                                page.type === 'cover' || page.type === 'back-cover'
+                                    ? 'cover-page'
+                                    : 'image-page'
+                            }
+                        >
+                            {/* Cover Page */}
                             {page.type === 'cover' && (
                                 <div className="cover-content">
                                     <div className="cover-decoration">✨</div>
                                     <h1 className="cover-title">{page.title}</h1>
                                     <p className="cover-subtitle">{page.subtitle}</p>
-                                    <div className="cover-decoration bottom">📖</div>
+                                    <div className="cover-decoration bottom">❤️</div>
                                 </div>
                             )}
 
+                            {/* Back Cover */}
                             {page.type === 'back-cover' && (
                                 <div className="cover-content back">
                                     <h1 className="cover-title">{page.title}</h1>
@@ -171,26 +170,24 @@ export default function Scrapbook() {
                                 </div>
                             )}
 
-                            {page.type === 'content' && (
-                                <div className="page-content lined-paper">
-                                    <span className="page-header">{page.header}</span>
-                                    <h2 className="page-title">{page.title}</h2>
-                                    <p className="page-text">{page.content}</p>
-
-                                    {page.notes?.map((note, i) => (
-                                        <div
-                                            key={i}
-                                            className={`sticky-note ${note.color}`}
-                                            style={note.style as React.CSSProperties}
-                                        >
-                                            {note.text}
-                                        </div>
-                                    ))}
-
-                                    <div className="page-decoration">
-                                        <div className="page-dot"></div>
-                                        <div className="page-dot"></div>
-                                        <div className="page-dot"></div>
+                            {/* Image Page */}
+                            {page.type === 'image' && (
+                                <div className="image-page-content">
+                                    <img
+                                        src={page.src}
+                                        alt={page.alt}
+                                        className="page-image"
+                                        onError={(e) => {
+                                            // Show placeholder if image not found
+                                            const target = e.target as HTMLImageElement
+                                            target.style.display = 'none'
+                                            target.parentElement!.classList.add('no-image')
+                                        }}
+                                    />
+                                    <div className="image-placeholder">
+                                        <span className="placeholder-icon">🖼️</span>
+                                        <span className="placeholder-text">Add your image</span>
+                                        <span className="placeholder-path">{page.src}</span>
                                     </div>
                                 </div>
                             )}

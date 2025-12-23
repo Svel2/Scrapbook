@@ -33,21 +33,14 @@ body {
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  padding: 2rem 1rem;
+  height: 100vh;
+  padding: 1rem 1rem 0.5rem;
+  overflow: hidden;
 }
 
 /* Title Section */
-.journal-info {
-  text-align: center;
-  margin-bottom: 2rem;
-}
 
-.journal-title {
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
+
 
 .journal-pages {
   font-size: 0.875rem;
@@ -60,11 +53,9 @@ body {
 
 /* Book Container */
 .book-container {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 0;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
@@ -73,13 +64,15 @@ body {
 /* Flipbook Styles */
 .flipbook {
   width: 100% !important;
-  max-width: 700px;
+  max-width: 600px;
 }
 
 /* Page Base */
 .page {
   background: var(--page-cream);
   overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 /* Cover Pages */
@@ -124,6 +117,65 @@ body {
   font-family: 'Patrick Hand', cursive;
   font-size: 1.2rem;
   opacity: 0.9;
+}
+
+/* Image Pages */
+.page.image-page {
+  background: var(--page-cream);
+}
+
+.image-page-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.page-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Placeholder when image is missing */
+.image-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  color: var(--ink-light);
+}
+
+.image-page-content.no-image .image-placeholder {
+  display: flex;
+}
+
+.placeholder-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.placeholder-text {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.placeholder-path {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-family: monospace;
 }
 
 /* Content Pages */
@@ -222,7 +274,8 @@ body {
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-  margin-top: 2rem;
+  padding: 1rem 0;
+  flex-shrink: 0;
 }
 
 .nav-btn {
@@ -257,26 +310,23 @@ body {
   text-align: center;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive - Tablet (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
   .app-container {
-    padding: 1rem 0.5rem;
-  }
-
-  .journal-info {
-    margin-bottom: 1rem;
-  }
-
-  .journal-title {
-    font-size: 1.5rem;
+    padding: 1rem 1rem 0.5rem;
   }
 
   .book-container {
-    padding: 0.5rem 0.5rem;
+    align-items: flex-start;
+    padding: 1.5rem 2rem 0;
+  }
+
+  .page {
+    border-radius: 14px;
   }
 
   .page-content {
-    padding: 1rem 0.75rem;
+    padding: 1.5rem 1.25rem;
   }
 
   .cover-title {
@@ -285,6 +335,66 @@ body {
 
   .cover-subtitle {
     font-size: 1rem;
+  }
+
+  .cover-decoration {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .nav-controls {
+    gap: 1.25rem;
+    padding: 1.5rem 0;
+  }
+
+  .nav-btn {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .page-indicator {
+    font-size: 0.9rem;
+    min-width: 55px;
+  }
+}
+
+/* Responsive - Mobile Phone */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1rem 0.5rem 0.5rem;
+  }
+
+  .book-container {
+    align-items: flex-start;
+    padding: 1rem 1rem 0;
+  }
+
+  .page {
+    border-radius: 12px;
+  }
+
+  .page-content {
+    padding: 1.25rem 1rem;
+  }
+
+  .cover-title {
+    font-size: 1.6rem;
+  }
+
+  .cover-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .cover-decoration {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
   }
 
   .page-title {
@@ -307,57 +417,62 @@ body {
   }
 
   .nav-controls {
-    margin-top: 1rem;
-    gap: 0.75rem;
+    gap: 1rem;
+    padding: 1.5rem 0;
   }
 
   .nav-btn {
-    padding: 0.6rem 1rem;
-    font-size: 0.8rem;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.85rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .page-indicator {
-    font-size: 0.8rem;
-    min-width: 45px;
+    font-size: 0.85rem;
+    min-width: 50px;
   }
 }
 
+/* Responsive - Mobile Phone */
 @media (max-width: 480px) {
   .app-container {
-    padding: 0.75rem 0.25rem;
-  }
-
-  .journal-title {
-    font-size: 1.3rem;
-  }
-
-  .journal-pages {
-    font-size: 0.75rem;
+    padding: 0.75rem 0.5rem 0.5rem;
   }
 
   .book-container {
-    padding: 0.25rem;
+    align-items: flex-start;
+    padding: 0.75rem 0.75rem 0;
+  }
+
+  .page {
+    border-radius: 10px;
   }
 
   .page-content {
-    padding: 0.6rem 0.5rem;
+    padding: 1rem 0.75rem;
   }
 
   .cover-title {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
 
   .cover-subtitle {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 
   .cover-decoration {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin-bottom: 0.5rem;
   }
 
   .page-title {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     margin-bottom: 0.4rem;
   }
 
@@ -389,14 +504,15 @@ body {
   }
 
   .nav-controls {
-    margin-top: 0.75rem;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    padding: 1.25rem 0;
   }
 
   .nav-btn {
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 1rem;
     font-size: 0.75rem;
-    gap: 0.25rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
 
   .page-indicator {
