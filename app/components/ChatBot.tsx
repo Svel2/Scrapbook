@@ -8,6 +8,19 @@ interface Message {
     content: string;
 }
 
+// Function to parse basic markdown to HTML
+function parseMarkdown(text: string): string {
+    return text
+        // Bold: **text** or __text__
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/__(.+?)__/g, '<strong>$1</strong>')
+        // Italic: *text* or _text_
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/_(.+?)_/g, '<em>$1</em>')
+        // Line breaks
+        .replace(/\n/g, '<br/>');
+}
+
 export default function ChatBot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
@@ -159,9 +172,10 @@ export default function ChatBot() {
                                     {message.role === 'assistant' && (
                                         <div className="chatbot-avatar">🤖</div>
                                     )}
-                                    <div className={`chatbot-bubble ${message.role}`}>
-                                        {message.content}
-                                    </div>
+                                    <div
+                                        className={`chatbot-bubble ${message.role}`}
+                                        dangerouslySetInnerHTML={{ __html: parseMarkdown(message.content) }}
+                                    />
                                 </motion.div>
                             ))}
 
