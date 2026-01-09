@@ -96,10 +96,22 @@ export async function POST(request: NextRequest) {
         // Build dynamic system prompt with current date/time
         const systemPrompt = buildSystemPrompt();
 
+        // Add API key check
+        const apiKey = process.env.OPENROUTER_API_KEY;
+        if (!apiKey) {
+            console.error('OPENROUTER_API_KEY is not set');
+            return NextResponse.json(
+                { error: 'API Key not configured' },
+                { status: 500 }
+            );
+        }
+
+        console.log('Sending request to OpenRouter with model: meta-llama/llama-3.1-8b-instruct:free');
+
         const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json',
                 'HTTP-Referer': 'https://digital-scrapbook.vercel.app',
                 'X-Title': 'Sweet 17 Birthday Scrapbook'
@@ -107,8 +119,7 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify({
                 model: 'meta-llama/llama-3.1-8b-instruct:free',
                 messages: [
-                    { role: 'system', content: systemPrompt },
-                    ...messages
+                    { role: 'user', content: systemPrompt + '\n\n' + messages.map((m: any) => `${m.role}: ${m.content}`).join('\n') }
                 ],
                 max_tokens: 600,
                 temperature: 0.7
@@ -119,7 +130,7 @@ export async function POST(request: NextRequest) {
             const error = await response.text();
             console.error('OpenRouter API Error:', response.status, error);
             return NextResponse.json(
-                { error: `API Error: ${response.status}` },
+                { error: `API Error: ${response.status} - ${error.substring(0, 100)}` },
                 { status: response.status }
             );
         }
@@ -144,7 +155,7 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error('Chat API Error:', error);
         return NextResponse.json(
-            { error: 'Internal server error' },
+            { error: `Internal server error: ${error}` },
             { status: 500 }
         );
     }
