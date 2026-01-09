@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
                 'X-Title': 'Sweet 17 Birthday Scrapbook'
             },
             body: JSON.stringify({
-                model: 'google/gemini-2.0-flash-exp:free',
+                model: 'xiaomi/mimo-v2-flash:free',
                 messages: [
                     { role: 'system', content: systemPrompt },
                     ...messages
