@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
                 'X-Title': 'Sweet 17 Birthday Scrapbook'
             },
             body: JSON.stringify({
-                model: 'nex-agi/deepseek-v3.1-nex-n1:free',
+                model: 'google/gemini-2.0-flash-exp:free',
                 messages: [
                     { role: 'system', content: systemPrompt },
                     ...messages
