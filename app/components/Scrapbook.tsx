@@ -43,21 +43,6 @@ const pagesData = [
         src: '/images/page2.gif',
         alt: 'Page 3'
     },
-    {
-        type: 'image',
-        src: '/images/page1.gif',
-        alt: 'Page 4'
-    },
-    {
-        type: 'image',
-        src: '/images/page2.gif',
-        alt: 'Page 5'
-    },
-    {
-        type: 'image',
-        src: '/images/page 3.gif',
-        alt: 'Page 6'
-    },
     // Back Cover
     {
         type: 'back-cover',
