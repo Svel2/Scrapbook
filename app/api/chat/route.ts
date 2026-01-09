@@ -117,16 +117,28 @@ export async function POST(request: NextRequest) {
 
         if (!response.ok) {
             const error = await response.text();
-            console.error('OpenRouter API Error:', error);
+            console.error('OpenRouter API Error:', response.status, error);
             return NextResponse.json(
-                { error: 'Failed to get response from AI' },
+                { error: `API Error: ${response.status}` },
                 { status: response.status }
             );
         }
 
         const data = await response.json();
+        console.log('OpenRouter Response:', JSON.stringify(data, null, 2));
+
+        const messageContent = data.choices?.[0]?.message?.content;
+
+        if (!messageContent) {
+            console.error('No message content in response:', data);
+            return NextResponse.json(
+                { error: 'No response from AI' },
+                { status: 500 }
+            );
+        }
+
         return NextResponse.json({
-            message: data.choices[0]?.message?.content || 'Maaf, saya tidak bisa merespons saat ini.'
+            message: messageContent
         });
 
     } catch (error) {

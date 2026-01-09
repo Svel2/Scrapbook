@@ -64,21 +64,28 @@ export default function ChatBot() {
             const data = await response.json();
 
             if (data.error) {
+                console.error('API returned error:', data.error);
                 setMessages(prev => [...prev, {
                     role: 'assistant',
-                    content: '😅 Maaf, ada sedikit masalah. Coba lagi ya!'
+                    content: '😅 Maaf, ada masalah dengan AI. Coba lagi dalam beberapa saat ya!'
                 }]);
-            } else {
+            } else if (data.message) {
                 setMessages(prev => [...prev, {
                     role: 'assistant',
                     content: data.message
+                }]);
+            } else {
+                console.error('No message in response:', data);
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: '😅 Maaf, responnya kosong. Coba lagi ya!'
                 }]);
             }
         } catch (error) {
             console.error('Error:', error);
             setMessages(prev => [...prev, {
                 role: 'assistant',
-                content: '😅 Oops! Koneksi terputus. Coba lagi ya!'
+                content: '😅 Oops! Ada masalah koneksi. Coba lagi ya!'
             }]);
         } finally {
             setIsLoading(false);
