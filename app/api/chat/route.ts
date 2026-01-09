@@ -105,12 +105,12 @@ export async function POST(request: NextRequest) {
                 'X-Title': 'Sweet 17 Birthday Scrapbook'
             },
             body: JSON.stringify({
-                model: 'deepseek/deepseek-r1-0528:free',
+                model: 'google/gemini-2.0-flash-exp:free',
                 messages: [
                     { role: 'system', content: systemPrompt },
                     ...messages
                 ],
-                max_tokens: 500,
+                max_tokens: 800,
                 temperature: 0.8
             })
         });
