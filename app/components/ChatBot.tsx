@@ -26,7 +26,7 @@ export default function ChatBot() {
     const [messages, setMessages] = useState<Message[]>([
         {
             role: 'assistant',
-            content: 'Haii Rynn! 🎉 Happy 17th Birthday! Selamat datang di usia sweet seventeen~ Semoga hari ini dan seterusnya selalu dipenuhi kebahagiaan ya! Oh iya, aku chatbot spesial yang dibuat sama Randy khusus buat kamu di hari istimewa ini. Mau ngobrol atau tanya-tanya? Aku siap nemenin! 🎂'
+            content: 'Haii Rynn! 🎉 Happy 17th Birthday! Selamat datang di usia sweet seventeen~ Semoga hari ini dan seterusnya selalu dipenuhi kebahagiaan ya! Oh iya, aku chatbot spesial yang dibuat sama Randy khusus buat kamu di hari istimewa ini. Mau ngobrol atau tanya-tanya soal Randy? Aku tau sedikit tentang dia! Aku siap nemenin! 🎂'
         }
     ]);
     const [input, setInput] = useState('');
