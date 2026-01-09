@@ -101,11 +101,11 @@ export async function POST(request: NextRequest) {
             headers: {
                 'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
                 'Content-Type': 'application/json',
-                'HTTP-Referer': 'https://digital-scrapbook.vercel.app',
+                'HTTP-Referer': 'https://birthdayfriend-vert.vercel.app',
                 'X-Title': 'Sweet 17 Birthday Scrapbook'
             },
             body: JSON.stringify({
-                model: 'google/gemini-2.0-flash-exp:free',
+                model: 'nex-agi/deepseek-v3.1-nex-n1:free',
                 messages: [
                     { role: 'system', content: systemPrompt },
                     ...messages

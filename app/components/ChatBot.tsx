@@ -170,7 +170,7 @@ export default function ChatBot() {
                                     className={`chatbot-message ${message.role}`}
                                 >
                                     {message.role === 'assistant' && (
-                                        <div className="chatbot-avatar">🤖</div>
+                                        <div className="chatbot-avatar">💝</div>
                                     )}
                                     <div
                                         className={`chatbot-bubble ${message.role}`}
@@ -185,7 +185,7 @@ export default function ChatBot() {
                                     animate={{ opacity: 1 }}
                                     className="chatbot-message assistant"
                                 >
-                                    <div className="chatbot-avatar">🤖</div>
+                                    <div className="chatbot-avatar">💝</div>
                                     <div className="chatbot-bubble assistant chatbot-typing">
                                         <span></span>
                                         <span></span>
